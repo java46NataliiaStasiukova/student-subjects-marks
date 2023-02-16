@@ -9,15 +9,14 @@ import org.springframework.beans.factory.annotation.*;
 import org.springframework.stereotype.Component;
 import jakarta.annotation.PostConstruct;
 import telran.spring.data.model.*;
-import telran.spring.data.repo.MarkRepository;
-import telran.spring.data.repo.StudentRepository;
-import telran.spring.data.repo.SubjectRepository;
 import telran.spring.data.service.CollegeService;
 
 @Component
-public class RandonDbCreation {
+public class RandomDbCreation {
 @Value("${app..marks.amount:100}")
 private int MARKS_LIMIT;
+@Value("${spring.jpa.hibernate.ddl-auto:create}")
+String ddlAutoProps;
 private static final int MIN = 35;
 private static final int MAX = 100;
 @Autowired
@@ -32,32 +31,23 @@ String names[] = { "Abraham", "Sarah",
 		"Aron", "Yehashua", "David", "Salomon",
 		"Nefertity", "Naftaly", "Natan", "Asher" };
 int count = 1;
-private static Logger LOG = LoggerFactory.getLogger(RandonDbCreation.class);
-@Autowired
-StudentRepository studentRepository;
-@Autowired
-SubjectRepository subjectRepository;
-@Autowired
-MarkRepository markRepository;
+private static Logger LOG = LoggerFactory.getLogger(RandomDbCreation.class);
 
 @PostConstruct
 void dbCreation() {
-	new Random().ints(0, names.length).distinct()
-	.limit(names.length).forEach(e -> 
-	collegeService.addStudent(new Student(count++, names[e])));
-	LOG.debug("created students: {}", studentRepository.findAll().size());
-	count = 1;
-	
-	new Random().ints(0, subjects.length).distinct()
-	.limit(subjects.length).forEach(e -> 
-	collegeService.addSubject(new Subject(count++, subjects[e])));
-	LOG.debug("created subjects: {}", subjectRepository.findAll().size());
-	
-	new Random().ints(MIN, MAX)
-	.limit(MARKS_LIMIT).forEach(e -> 
-	collegeService.addMark(new Mark(getRandomId(names.length),
-			getRandomId(subjects.length), e)));
-	LOG.debug("created marks: {}", markRepository.findAll().size());
+	if (ddlAutoProps.equals("create")) {
+		LOG.info("creating new DB with {} ramdom marks", MARKS_LIMIT);
+		new Random().ints(0, names.length).distinct().limit(names.length)
+				.forEach(e -> collegeService.addStudent(new Student(count++, names[e])));
+		count = 1;
+		new Random().ints(0, subjects.length).distinct().limit(subjects.length)
+				.forEach(e -> collegeService.addSubject(new Subject(count++, subjects[e])));
+		new Random().ints(MIN, MAX).limit(MARKS_LIMIT).forEach(
+				e -> collegeService.addMark(new Mark(getRandomId(names.length), getRandomId(subjects.length), e)));
+		LOG.info("DB was created with {} ramdom marks", MARKS_LIMIT);
+	} else {
+		LOG.info("new DB with {} marks was NOT created", MARKS_LIMIT);
+	}
 }
 private long getRandomId(int length) {
 
