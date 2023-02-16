@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 @Table(name="students")//not required
 public class StudentEntity {
 @Id
+@Column(name="stid")
 long id;
 @Column(unique = true)
 String name;

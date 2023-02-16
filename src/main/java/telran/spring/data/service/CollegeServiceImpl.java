@@ -1,5 +1,6 @@
 package telran.spring.data.service;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 
 import org.springframework.stereotype.Service;
@@ -7,6 +8,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import telran.spring.data.entities.*;
 import telran.spring.data.model.*;
+import telran.spring.data.proj.MarkProj;
+import telran.spring.data.proj.StudentSubjectMarkProj;
 import telran.spring.data.repo.*;
 
 @Service
@@ -58,6 +61,18 @@ public CollegeServiceImpl(StudentRepository studentRepository, SubjectRepository
 		}
 		MarkEntity markEntity = new MarkEntity(student, subject, mark.mark);
 		markRepository.save(markEntity);
+	}
+
+	@Override
+	public List<MarkProj> getMarksByNameSubject(String name, String subject) {
+		
+		return markRepository.findByStudentNameAndSubjectSubject(name, subject);
+	}
+
+	@Override
+	public List<StudentSubjectMarkProj> getMarksByName(String name) {
+		
+		return markRepository.findByStudentName(name);
 	}
 
 }

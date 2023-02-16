@@ -10,11 +10,11 @@ public class MarkEntity {
 long id;
 
 @ManyToOne//annotation for foreign key
-@JoinColumn(name = "student_id")//column for connection
+@JoinColumn(name = "stid")//column for connection//"student_id"
 StudentEntity student;
 
 @ManyToOne
-@JoinColumn(name = "subject_id")
+@JoinColumn(name = "suid")//subject_id
 SubjectEntity subject;
 
 int mark;
