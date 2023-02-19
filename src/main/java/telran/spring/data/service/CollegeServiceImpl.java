@@ -8,8 +8,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import telran.spring.data.entities.*;
 import telran.spring.data.model.*;
+import telran.spring.data.proj.IntervalMarksCount;
 import telran.spring.data.proj.MarkProj;
-import telran.spring.data.proj.StudentSubjectMarkProj;
+import telran.spring.data.proj.StudentAvgMark;
+import telran.spring.data.proj.StudentName;
+import telran.spring.data.proj.StudentSubjectMark;
 import telran.spring.data.repo.*;
 
 @Service
@@ -70,9 +73,45 @@ public CollegeServiceImpl(StudentRepository studentRepository, SubjectRepository
 	}
 
 	@Override
-	public List<StudentSubjectMarkProj> getMarksByName(String name) {
+	public List<StudentSubjectMark> getMarksByName(String name) {
 		
 		return markRepository.findByStudentName(name);
+	}
+
+	@Override
+	public List<StudentAvgMark> getStudentsAvgMark() {
+		
+		return markRepository.findStudentsByAverageMark();
+	}
+
+	@Override
+	public List<StudentName> getBestStudents() {
+		
+		return markRepository.findStudentsByMaxAverageMark();
+	}
+
+	@Override
+	public List<StudentName> getTopBestStudents(int nStudents) {
+		
+		return markRepository.findStudentsByMaxAverageMark(nStudents);
+	}
+
+	@Override
+	public List<StudentName> getTopBestStudentsSubject(int nStudents, String subject) {
+		
+		return markRepository.findStudentsByMaxAverageMark(nStudents, subject);
+	}
+
+	@Override
+	public List<StudentSubjectMark> getMarksOfWorstStudents(int nStudents) {
+		
+		return markRepository.findStudentsByMinAverageMark(nStudents);
+	}
+
+	@Override
+	public List<IntervalMarksCount> marksDistibution(int interval) {
+		
+		return markRepository.findByStudentsMaxMarkAndMinMarkAndCountMarks(interval);
 	}
 
 }

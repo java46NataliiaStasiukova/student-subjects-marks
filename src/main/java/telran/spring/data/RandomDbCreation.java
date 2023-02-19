@@ -51,7 +51,7 @@ void dbCreation() {
 }
 private long getRandomId(int length) {
 
-	return ThreadLocalRandom.current().nextInt(1, length);
+	return ThreadLocalRandom.current().nextInt(1, length + 1);
 }
 
 }

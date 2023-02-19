@@ -6,6 +6,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 
+import jakarta.annotation.PreDestroy;
+
 @SpringBootApplication
 public class StudentsSubjectsMarksApplication {
 private static final Object SHUTDOWN = "shutdown";
@@ -23,6 +25,11 @@ private static final Object SHUTDOWN = "shutdown";
 			}
 		}
 		ctx.close();
+	}
+	
+	@PreDestroy
+	void preDestroy() {
+		System.out.println("bye - shutdown has been performed");
 	}
 
 }
