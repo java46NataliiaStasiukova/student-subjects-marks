@@ -30,39 +30,37 @@ List<StudentSubjectMark> getMarksByName(@RequestParam (name="name")String name){
 	return collegeService.getMarksByName(name);
 }
 
-@GetMapping("marksAvg")
+@GetMapping("marks/average")
 List<StudentAvgMark> studentsAvgMark() {
 	LOG.info("request for getting studentsAvgMark");
 	return collegeService.getStudentsAvgMark();
 }
-//TODO
-@GetMapping("students")
-List<StudentName> bestStudents() {
-	LOG.info("request for getting bestStudents, with no params");
-	return collegeService.getBestStudents();
-}
-//TODO
-//@GetMapping("students")
-//List<StudentName> bestStudents(@RequestParam(defaultValue = "1", name = "nStudents")int nStudents) {
-//	LOG.info("request for getting bestStudents; nStudents: {}", nStudents);
-//	return collegeService.getTopBestStudents(nStudents);
-//}
-//TODO
-//@GetMapping("students")
-//List<StudentName> bestStudents(@RequestParam(defaultValue = "5", name = "nStudents")int nStudents,
-//		@RequestParam(defaultValue = "React", name = "subject") String subject) {
-//	LOG.info("request for getting bestStudents; nStudents: {}, by subject: {}", nStudents, subject);
-//	return collegeService.getTopBestStudentsSubject(nStudents, subject);
-//}
 
-@GetMapping("students/marks")
+@GetMapping("students/best")
+List<StudentName> bestStudents(@RequestParam(defaultValue = "-1", name = "nStudents")int nStudents,
+		@RequestParam(defaultValue = "", name = "subject") String subject) {
+	LOG.info("request for getting bestStudents; nStudents: {}, by subject: {}", nStudents, subject);
+	List<StudentName> res = null;
+	if(nStudents > 0) {
+		if(subject.isEmpty()) {
+			res = collegeService.getTopBestStudents(nStudents);
+		} else {
+			res = collegeService.getTopBestStudentsSubject(nStudents, subject);
+		}
+	} else {
+		res = collegeService.getBestStudents();
+	}
+	return res;
+}
+
+@GetMapping("students/worst")
 List<StudentSubjectMark> worstStudents(int nStudents) {
 	LOG.info("requesr for getting {} worstStudents", nStudents);
 	return collegeService.getMarksOfWorstStudents(nStudents);
 }
 
 //TODO
-@GetMapping("marks/interval")
+@GetMapping("marks/distribution")
 List<IntervalMarksCount> marksDistribution(@RequestParam(defaultValue="10", name="interval") int interval){
 	LOG.info("request for getting marksDistribution in interval: {}", interval);
 	return collegeService.marksDistibution(interval);
