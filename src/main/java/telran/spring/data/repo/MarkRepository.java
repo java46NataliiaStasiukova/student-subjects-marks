@@ -22,11 +22,15 @@ public interface MarkRepository extends JpaRepository<MarkEntity, Long> {
 			+ "join marks m on m.stid=st.stid\n"
 			+ "group by st.name", nativeQuery = true)
 	List<StudentAvgMark> findStudentsByAverageMark();
-	
-	@Query(value = "select name from students st "
-			+ "join marks m on m.stid=st.stid "
-			+ "group by st.name having avg(mark) > ( "
-			+ "select avg(mark) from marks)", nativeQuery = true)
+
+//SQL
+//	@Query(value = "select name from students st "
+//			+ "join marks m on m.stid=st.stid "
+//			+ "group by st.name having avg(mark) > ( "
+//			+ "select avg(mark) from marks)", nativeQuery = true)
+//JPQL	
+	@Query("select student.name as name from MarkEntity group by student.name having avg(mark) > "
+			+ "(select avg(mark) from MarkEntity)")
 	List<StudentName> findStudentsByMaxAverageMark();
 	
 	@Query(value = "select name from students st\n"
@@ -50,8 +54,12 @@ public interface MarkRepository extends JpaRepository<MarkEntity, Long> {
 	List<StudentSubjectMark> findStudentsByMinAverageMark(int nStudents);
 	
 	//TODO
+//SQL	
 	@Query(value = "select name, max(mark), min(mark), count(mark) from marks m "
 			+ "join students st on st.stid=m.stid group by st.name", nativeQuery = true)
+//JPQL
+	//TODO
+	//@Query("select ")
 	List<IntervalMarksCount> findByStudentsMaxMarkAndMinMarkAndCountMarks(int interval);
 	
 }

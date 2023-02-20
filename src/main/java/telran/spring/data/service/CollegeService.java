@@ -19,5 +19,11 @@ public interface CollegeService {
 	List<StudentSubjectMark> getMarksOfWorstStudents(int nStudents);
 	List<IntervalMarksCount> marksDistibution(int interval);
 	
+	//in real application should be with security (administrative part of application)
+	List<String> getSqlQuery(String sqlQuery);
+	List<String> getJpqlQuery(String jpqlQuery);
+	List<String> removeStudents(double markCountLess);//removing all students having avg(mark)
+	// * count(mark) less than a given value
+	
 }
 

@@ -5,6 +5,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import telran.spring.data.model.QueryData;
+import telran.spring.data.model.QueryType;
 import telran.spring.data.proj.*;
 import telran.spring.data.service.CollegeService;
 
@@ -64,6 +66,17 @@ List<StudentSubjectMark> worstStudents(int nStudents) {
 List<IntervalMarksCount> marksDistribution(@RequestParam(defaultValue="10", name="interval") int interval){
 	LOG.info("request for getting marksDistribution in interval: {}", interval);
 	return collegeService.marksDistibution(interval);
+}
+
+@PostMapping("query")
+List<String> getQuery(@RequestBody QueryData queryData){
+	return queryData.type == QueryType.JPQL ? collegeService.getJpqlQuery(queryData.query) :
+		collegeService.getSqlQuery(queryData.query);
+}
+
+@DeleteMapping("students")
+List<String> removeStudents(@RequestParam("score") int markCountLess){
+	return collegeService.removeStudents(markCountLess);
 }
 
 
