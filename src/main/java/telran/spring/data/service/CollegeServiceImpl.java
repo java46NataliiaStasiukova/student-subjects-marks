@@ -105,7 +105,7 @@ public CollegeServiceImpl(StudentRepository studentRepository, SubjectRepository
 	@Override
 	public List<StudentName> getTopBestStudentsSubject(int nStudents, String subject) {
 		
-		return markRepository.findStudentsByMaxAverageMark(nStudents, subject);
+		return markRepository.findStudentByMaxMarkBySubject(nStudents, subject);
 	}
 
 	@Override
@@ -160,6 +160,15 @@ public CollegeServiceImpl(StudentRepository studentRepository, SubjectRepository
 		List<String> removedStudentNames = studentsToRemove.stream()
 				.map(StudentEntity::getName).toList();
 		return removedStudentNames;
+	}
+
+	@Override
+	@Transactional
+	public List<String> removeLeastPopularSubjects(int marksThreshold) {
+		List<SubjectEntity> subjectsToRemove = subjectRepository.worstSubject(marksThreshold);
+		List<String> removedSubjectNames = subjectsToRemove.stream()
+				.map(SubjectEntity::getSubject).toList();
+		return removedSubjectNames;
 	}
 
 }

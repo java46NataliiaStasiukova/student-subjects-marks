@@ -61,7 +61,6 @@ List<StudentSubjectMark> worstStudents(int nStudents) {
 	return collegeService.getMarksOfWorstStudents(nStudents);
 }
 
-//TODO
 @GetMapping("marks/distribution")
 List<IntervalMarksCount> marksDistribution(@RequestParam(defaultValue="10", name="interval") int interval){
 	LOG.info("request for getting marksDistribution in interval: {}", interval);
@@ -77,6 +76,11 @@ List<String> getQuery(@RequestBody QueryData queryData){
 @DeleteMapping("students")
 List<String> removeStudents(@RequestParam("score") int markCountLess){
 	return collegeService.removeStudents(markCountLess);
+}
+
+@DeleteMapping("subjects")
+List<String> RemoveSubject(@RequestParam("score") int marksThreshold){
+	return collegeService.removeLeastPopularSubjects(marksThreshold);
 }
 
 

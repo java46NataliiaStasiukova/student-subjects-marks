@@ -13,5 +13,4 @@ public interface StudentRepository extends JpaRepository<StudentEntity, Long> {
     		+ " (select student.id from MarkEntity"
     		+ " group by student.id having avg(mark) * count(mark) < :markCountLess)")
 	List<StudentEntity> worstStudents(double markCountLess);
-
 }
