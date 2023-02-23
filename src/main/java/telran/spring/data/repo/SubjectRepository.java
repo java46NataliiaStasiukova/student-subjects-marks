@@ -10,9 +10,16 @@ import telran.spring.data.entities.*;
 public interface SubjectRepository extends JpaRepository<SubjectEntity, Long> {
 
 //JPQL
-    @Query("select subjects from SubjectEntity subjects where id in"
-    		+ " (select subject.id from MarkEntity"
-    		+ " group by subject.id having count(mark) < :markCountLess)")
-	List<SubjectEntity> worstSubject(int markCountLess);
+//    @Query("select course from SubjectEntity course where id in"
+//    		+ " (select subject.id from MarkEntity"
+//    		+ " group by subject.id having count(mark) < :markCountLess)")
+	
+//JPQL - Solution
+	@Query("select course from SubjectEntity course where subject in "
+			+ "(select ms.subject from MarkEntity me right "
+			+ "join me.subject ms group by ms.subject "
+			+ "having count(mark) < :markThreshold)")
+	
+	List<SubjectEntity> worstSubject(int markThreshold);
 
 }

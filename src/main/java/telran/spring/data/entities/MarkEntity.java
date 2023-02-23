@@ -54,4 +54,10 @@ public String toString() {
 	
 }
 
+public void setMark(int mark) {
+
+	this.mark = mark;
+}
+
+
 }

@@ -83,6 +83,12 @@ List<String> RemoveSubject(@RequestParam("score") int marksThreshold){
 	return collegeService.removeLeastPopularSubjects(marksThreshold);
 }
 
+@PutMapping("marks")
+void incriaseMarks(@RequestParam ("id")int studentId, @RequestParam ("delta")int delta) {
+	collegeService.incriseMarksStudent(studentId, delta);
+}
+
+
 
 
 }
